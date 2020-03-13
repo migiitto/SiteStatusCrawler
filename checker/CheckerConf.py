@@ -1,3 +1,6 @@
+import json
+
+
 class CheckerConf:
     id = 0
     name = ""
@@ -23,6 +26,14 @@ class CheckerConf:
 
     def hasRegex(self):
         return self.regex is None
+
+    def toJSON(self):
+        return json.dumps({"id":self.id, "name":self.name, "url":self.url, "period":self.period, "regex":self.regex})
+
+    @staticmethod
+    def fromJSON(jsondata):
+        parsed = json.loads(jsondata)
+        return CheckerConf(parsed["id"], parsed["name"], parsed["url"], parsed["period"], parsed["regex"])
 
     @staticmethod
     def fromSQL(row):

@@ -1,3 +1,5 @@
+import datetime
+
 import requests
 import time
 import re
@@ -16,7 +18,10 @@ page.
 
 def validate_response(response, pattern):
     try:
-        return re.match(pattern, response.text)
+        a = re.findall(pattern, response)
+        if len(a):
+            return True
+        return False
     except re.error:
         logger.exception("Error parsing regex")
         return False # Returning validation "error" regex fails, error could be handled better
@@ -28,13 +33,14 @@ def check(conf):
     with requests.session() as session:
         try:
             start = time.time()
-            response = session.get(conf.url) #TODO: check if this is lazy
+            response = session.get(conf.url, timeout=60)
             end = time.time()
             if conf.regex is not None:
-                valid = validate_response(response, conf.regex)
-            insert_record(conf, response.status_code, end-start, valid)
+                valid = validate_response(response.text, conf.regex)
+            return [conf.toJSON(), response.status_code, end-start, valid, datetime.datetime.now().isoformat()]
         except requests.exceptions.ConnectTimeout:
             # Timed out
-            insert_record(conf, -1, end - start, None)
+            return [conf.toJSON(), -1, -1, None, datetime.datetime.now().isoformat()]
         except Exception as e:
             print("Unhandled exception in checking site:", conf, e)
+            return [conf.toJSON(), -2, -2, None, datetime.datetime.now().isoformat()]
