@@ -40,7 +40,7 @@ CREATE TABLE public.sites_stats
         ON UPDATE NO ACTION
         ON DELETE CASCADE
         NOT VALID
-)
+);
 /* We are cascading sites_stats to cleanup non-referenced data.
 In prod, somekind of a soft delete should exists, but for this case
 probably not needed.
@@ -55,4 +55,4 @@ ALTER TABLE public.sites
     OWNER to siteuser;
 
 ALTER TABLE public.sites_stats
-    OWNER to postgres;
+    OWNER to siteuser;
