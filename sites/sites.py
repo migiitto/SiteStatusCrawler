@@ -6,12 +6,12 @@ from checker.CheckerConf import CheckerConf
 from database.database import get_cursor, get_conn
 
 
-def get_sites():
+def get_sites(conn=None, cursor=None):
     list_of_sites = []
-    conn = None
     try:
-        conn = get_conn()
-        cursor = get_cursor(conn)
+        if not conn or not cursor:
+            conn = get_conn()
+            cursor = get_cursor(conn)
         cursor.execute("SELECT id, name, url, frequency, regex FROM sites")
 
 

@@ -3,13 +3,16 @@ import json
 import time
 import unittest
 
+import psycopg2
 from kafka import KafkaConsumer, KafkaProducer
 
 from checker.CheckerConf import CheckerConf
 from checker.checker import validate_response, check
 from config import DATABASE_IP, DATABASE_PORT, DATABASE_USER, DATABASE_PASS, DATABASE_DB, BOOTSTRAP_SERVERS, \
-    SECURITY_PROTOCOL, SSL_CERT, SSL_KEY, SSL_CA
+    SECURITY_PROTOCOL, SSL_CERT, SSL_KEY, SSL_CA, TEST_DATABASE_IP, TEST_DATABASE_PORT, TEST_DATABASE_DB, \
+    TEST_DATABASE_USER, TEST_DATABASE_PASS
 from database.database import get_conn, get_cursor
+from sites.sites import get_sites, insert_record
 
 
 class TestDatabase(unittest.TestCase):
@@ -83,6 +86,35 @@ class TestChecker(unittest.TestCase):
         self.assertIs(validate_response(invalid_text, pattern), False)
 
 
+class TestSites(unittest.TestCase):
+    sql = [1, "test", "https://www.google.com", 60, None]
+
+    def test_site_fetching(self):
+        try:
+            conn, cursor = get_test_conn_cursor()
+            sites = get_sites(conn, cursor)
+            self.assertEqual(len(sites), 1)
+            self.assertEqual(CheckerConf.fromSQL(self.sql).toJSON(), sites[0].toJSON())
+        except:
+            self.assertEqual(True, False)
+        finally:
+            if conn is not None:
+                conn.close()
+
+    def test_record_inserting(self):
+        site = CheckerConf.fromSQL(self.sql)
+        insert_record(site,
+            200,
+            0.02,
+            None,
+            datetime.datetime.now()
+        )
+
+def get_test_conn_cursor():
+    conn = psycopg2.connect(host=TEST_DATABASE_IP, port=TEST_DATABASE_PORT,
+                            database=TEST_DATABASE_DB, user=TEST_DATABASE_USER,
+                            password=TEST_DATABASE_PASS)
+    return conn, conn.cursor()
 
 if __name__ == '__main__':
     unittest.main()

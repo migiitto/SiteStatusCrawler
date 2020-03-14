@@ -14,3 +14,10 @@ DATABASE_PORT = os.environ.get("DATABASE_PORT", "5432")
 DATABASE_USER = os.environ.get("DATABASE_USER", "siteuser")
 DATABASE_PASS = os.environ.get("DATABASE_PASS", "siteuser")
 DATABASE_DB = os.environ.get("DATABASE_DB", "sitestatus")
+
+
+TEST_DATABASE_IP = os.environ.get("DATABASE_IP", DATABASE_IP)
+TEST_DATABASE_PORT = os.environ.get("DATABASE_PORT", DATABASE_PORT)
+TEST_DATABASE_USER = os.environ.get("DATABASE_USER", DATABASE_USER)
+TEST_DATABASE_PASS = os.environ.get("DATABASE_PASS", DATABASE_PASS)
+TEST_DATABASE_DB = os.environ.get("DATABASE_DB", "sitestatus_test")
