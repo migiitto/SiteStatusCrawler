@@ -2,7 +2,7 @@ import os
 import json
 
 #Kafka
-BOOTSTRAP_SERVERS = json.loads(os.environ.get("BOOTSTRAP_SERVERS", '["migi-kafka-testing-msommarberg-6dbf.aivencloud.com:12673"]'))
+BOOTSTRAP_SERVERS = json.loads(os.environ.get("BOOTSTRAP_SERVERS", '["localhost:1234"]'))
 SECURITY_PROTOCOL = "SSL"
 SSL_CERT = "ssl/service.cert"
 SSL_KEY = "ssl/service.key"
