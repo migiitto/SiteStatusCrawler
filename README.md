@@ -15,3 +15,7 @@ TOTAL / 189 / 24 / 87%
 `INSERT INTO sites(name, url, frequency, regex) VALUES("Google", "https://www.google.com", 120, "<title[^>]*>(.*?)</title>")`
 - Run consumer with "python3 consumer.py"
 - Run producer with "python3 producer.py"
+
+# Running the tests
+No coverage: python3 tests.py
+Coverage: coverage run -m unittest discover (remember to install coverage first!) 
