@@ -18,4 +18,5 @@ TOTAL / 189 / 24 / 87%
 
 # Running the tests
 No coverage: python3 tests.py
+
 Coverage: coverage run -m unittest discover (remember to install coverage first!) 
